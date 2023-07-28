@@ -19,16 +19,16 @@ options(scipen = 6, digits = 4)
 primeiroano <- 1993
 anomaisrecente <- as.numeric(format(Sys.time(), "%Y")) - 1
 
-files <- list.files(path="data_raw/", pattern=".csv$")
+files <- list.files(path = "data_raw/", pattern = ".CSV$")
 
 # de qualquer forma, é preciso baixar o .csv primeiro e verificar se todos começam na terceira linha!
 
-csv_coop_completo_1993a2022 <- as.data.frame()
+csv_coop_completo_1993a2022 <- data.frame()
 
 for(i in primeiroano:anomaisrecente){
    
    eval(parse(text=paste0("
-                        csv_",i," <- read.csv('/home/rtheodoro/Área de Trabalho/arquivos bcb/",i,"12COOPERATIVAS.CSV',
+                        csv_",i," <- read.csv('data_raw/",i,"12COOPERATIVAS.CSV',
                                               sep=';', skip = 3)
                                               
                         csv_",i," <- csv_",i," |>  dplyr::filter(DOCUMENTO==4010) %>% 
@@ -36,10 +36,10 @@ for(i in primeiroano:anomaisrecente){
                                                 
                         names(csv_",i,")[1:3] <- c('cnpj','ano','razao_social')
 
-                        csv_",i," <- reshape(csv_",i,",timevar = 'CONTA',
-                                                idvar = c('cnpj','ano','razao_social'), direction = 'wide', v.names = NULL)
+                        csv_",i," <- reshape(csv_",i,", timevar = 'CONTA',
+                                                idvar = c('cnpj', 'ano', 'razao_social'), direction = 'wide', v.names = NULL)
  
-                        csv_coop_completo_1993a2022 <- merge(csv_coop_completo_1993a2022,csv_",i,", all = TRUE)
+                        csv_coop_completo_1993a2022 <- merge(csv_coop_completo_1993a2022, csv_",i,", all = TRUE)
                         
                         rm(csv_",i,")
                         
