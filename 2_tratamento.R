@@ -19,31 +19,71 @@ options(scipen = 6, digits = 4)
 primeiroano <- 1993
 anomaisrecente <- as.numeric(format(Sys.time(), "%Y")) - 1
 
-files <- list.files(path = "data_raw/", pattern = ".CSV$")
-
-# de qualquer forma, é preciso baixar o .csv primeiro e verificar se todos começam na terceira linha!
-
 csv_coop_completo_1993a2022 <- data.frame()
 
-for(i in primeiroano:anomaisrecente){
+for(i in primeiroano:anomaisrecente) {
    
-   eval(parse(text=paste0("
-                        csv_",i," <- read.csv('data_raw/",i,"12COOPERATIVAS.CSV',
-                                              sep=';', skip = 3)
-                                              
-                        csv_",i," <- csv_",i," |>  dplyr::filter(DOCUMENTO==4010) %>% 
-                                                dplyr::select(CNPJ, X.DATA_BASE, NOME_INSTITUICAO, CONTA, SALDO) 
-                                                
-                        names(csv_",i,")[1:3] <- c('cnpj','ano','razao_social')
+   print(glue::glue("Carregando Balanço do ano {i}"))
+   if (i == 1993) {
+      csv_i <-
+         readr::read_delim(
+            glue::glue('data_raw/{i}12COOPERATIVAS.CSV'),
+            delim = ";",
+            escape_double = FALSE,
+            trim_ws = TRUE,
+            skip = 4,
+            show_col_types = FALSE
+         )
+      
+      print(glue::glue("Tratando Balanço do ano {i}"))
+      
+      csv_i <- csv_i |>  dplyr::filter(DOCUMENTO == 4010) |>
+         dplyr::select(CNPJ, `#DATA_BASE`, NOME_INSTITUICAO, CONTA, SALDO)
+      
+   } else if (i > 1993 & i < 2010) {
+      csv_i <-
+         readr::read_delim(
+            glue::glue('data_raw/{i}12COOPERATIVAS.CSV'),
+            delim = ";",
+            escape_double = FALSE,
+            trim_ws = TRUE,
+            skip = 3,
+            show_col_types = FALSE
+         )
+      print(glue::glue("Tratando Balanço do ano {i}"))
+      csv_i <- csv_i |>  dplyr::filter(DOCUMENTO == 4010) |>
+         dplyr::select(CNPJ, DATA, `NOME INSTITUICAO`, CONTA, SALDO)
+   }  else{
+      csv_i <-
+         readr::read_delim(
+            glue::glue('data_raw/{i}12COOPERATIVAS.CSV'),
+            delim = ";",
+            escape_double = FALSE,
+            trim_ws = TRUE,
+            skip = 3,
+            show_col_types = FALSE
+         )
+      print(glue::glue("Tratando Balanço do ano {i}"))
+      csv_i <- csv_i |>  dplyr::filter(DOCUMENTO == 4010) |>
+         dplyr::select(CNPJ, `#DATA_BASE`, NOME_INSTITUICAO, CONTA, SALDO)
+   }
 
-                        csv_",i," <- reshape(csv_",i,", timevar = 'CONTA',
-                                                idvar = c('cnpj', 'ano', 'razao_social'), direction = 'wide', v.names = NULL)
- 
-                        csv_coop_completo_1993a2022 <- merge(csv_coop_completo_1993a2022, csv_",i,", all = TRUE)
-                        
-                        rm(csv_",i,")
-                        
-                        ")))
+   
+   names(csv_i)[1:3] <- c('cnpj', 'ano', 'razao_social')
+   
+   csv_i <- csv_i |> 
+      tidyr::pivot_wider(
+         id_cols = c(cnpj, ano, razao_social),
+         names_from = CONTA,
+         values_from = SALDO
+      )
+   
+   print(glue::glue("Unificando Balanço do ano {i}"))
+   csv_coop_completo_1993a2022 <-
+      merge(csv_coop_completo_1993a2022, csv_i, all = TRUE)
+   
+   rm(csv_i)
+   
 }
 
 

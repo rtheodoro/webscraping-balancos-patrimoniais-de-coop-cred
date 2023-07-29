@@ -19,4 +19,6 @@ Este projeto serve para fazer o download do balanço consolidado de todas as Coo
 
 #### NOTA
 
-O arquivo .csv de 2022 está com muitos problemas e foi ajustado manualmente. O problema é que algumas informações da coluna NOME_CONTA está ocupando espaço da coluna SALDO.
+o arquivo de 2022 estava com problemas na importação (uma coluna estava ocupando espaço da outra), acredito ter resolvido.
+
+Caso encontrem alguma inconsistência no arquivo final, me mandem um e-mail rtheodoro@usp.br
