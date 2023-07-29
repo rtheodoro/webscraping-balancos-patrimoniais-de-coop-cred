@@ -10,7 +10,7 @@ Este projeto serve para fazer o download do balanço consolidado de todas as Coo
 
 #### Estrutura do projeto
 
-- o script `main` irá rodar os scritps `1_webscraping` e `2_tratamento`
+- o script `0_main` irá rodar os scritps `1_webscraping` e `2_tratamento`
 
 - a pasta `data_raw` contém os arquivos .zip e .csv baixados diretamente do Bacen
 
@@ -19,6 +19,10 @@ Este projeto serve para fazer o download do balanço consolidado de todas as Coo
 
 #### NOTA
 
-o arquivo de 2022 estava com problemas na importação (uma coluna estava ocupando espaço da outra), acredito ter resolvido.
+O arquivo de 2022 estava com problemas na importação (uma coluna estava ocupando espaço da outra), acredito ter resolvido.
+
+Ainda irei conferir o melhor os resultados.
+
+Os valores NÃO foram atualizados pela inflação, são os valores originais dos arquivos.
 
 Caso encontrem alguma inconsistência no arquivo final, me mandem um e-mail rtheodoro@usp.br
