@@ -83,4 +83,4 @@ csv_coop_completo_1993a2022 <- csv_coop_completo_1993a2022  |>
    dplyr::mutate_at(dplyr::vars(dplyr::matches("[0-9]")), ~ as.numeric(gsub(",", ".", .))) 
 
 
-write.csv(csv_coop_completo_1993a2022, file = "data/balanco_coop_cred_1993a2022_4010.csv")
+write.csv(csv_coop_completo_1993a2022, file = "data/balanco_coop_cred_1993a2022_4010.csv", row.names = FALSE)
