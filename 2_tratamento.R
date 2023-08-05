@@ -26,13 +26,10 @@ for(i in primeiroano:anomaisrecente) {
    print(glue::glue("Carregando Balanço do ano {i}"))
    if (i == 1993) {
       csv_i <-
-         readr::read_delim(
+         data.table::fread(
             glue::glue('data_raw/{i}12COOPERATIVAS.CSV'),
-            delim = ";",
-            escape_double = FALSE,
-            trim_ws = TRUE,
-            skip = 4,
-            show_col_types = FALSE
+            sep = ";",
+            skip = 4
          )
       
       print(glue::glue("Tratando Balanço do ano {i}"))
@@ -42,26 +39,20 @@ for(i in primeiroano:anomaisrecente) {
       
    } else if (i > 1993 & i < 2010) {
       csv_i <-
-         readr::read_delim(
+         data.table::fread(
             glue::glue('data_raw/{i}12COOPERATIVAS.CSV'),
-            delim = ";",
-            escape_double = FALSE,
-            trim_ws = TRUE,
-            skip = 3,
-            show_col_types = FALSE
+            sep = ";",
+            skip = 3
          )
       print(glue::glue("Tratando Balanço do ano {i}"))
       csv_i <- csv_i |>  dplyr::filter(DOCUMENTO == 4010) |>
          dplyr::select(CNPJ, DATA, `NOME INSTITUICAO`, CONTA, SALDO)
    }  else{
       csv_i <-
-         readr::read_delim(
+         data.table::fread(
             glue::glue('data_raw/{i}12COOPERATIVAS.CSV'),
-            delim = ";",
-            escape_double = FALSE,
-            trim_ws = TRUE,
-            skip = 3,
-            show_col_types = FALSE
+            sep = ";",
+            skip = 3
          )
       print(glue::glue("Tratando Balanço do ano {i}"))
       csv_i <- csv_i |>  dplyr::filter(DOCUMENTO == 4010) |>
@@ -85,6 +76,11 @@ for(i in primeiroano:anomaisrecente) {
    rm(csv_i)
    
 }
+
+
+# Substitua 'csv_coop_completo_1993a2022' pelo nome real do seu data frame
+csv_coop_completo_1993a2022 <- csv_coop_completo_1993a2022  |> 
+   dplyr::mutate_at(dplyr::vars(dplyr::matches("[0-9]")), ~ as.numeric(gsub(",", ".", .))) 
 
 
 write.csv(csv_coop_completo_1993a2022, file = "data/balanco_coop_cred_1993a2022_4010.csv")
