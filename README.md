@@ -21,8 +21,6 @@ Este projeto serve para fazer o download do balanço consolidado de todas as Coo
 
 O arquivo de 2022 estava com problemas na importação (uma coluna estava ocupando espaço da outra), acredito ter resolvido.
 
-Ainda irei conferir o melhor os resultados.
-
 Os valores NÃO foram atualizados pela inflação, são os valores originais dos arquivos.
 
 Caso encontrem alguma inconsistência no arquivo final, me mandem um e-mail rtheodoro@usp.br
